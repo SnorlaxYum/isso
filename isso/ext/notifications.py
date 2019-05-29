@@ -286,7 +286,7 @@ class SMTP(object):
                     repliee=parent_comment["author"] or self.no_name,
                     replier=comment["author"] or self.no_name,
                     receiver=recipient["author"] or self.no_name)
-            return self.subject_format[0].format(
+            return subject_format[0].format(
                 title=thread["title"],
                 repliee=parent_comment["author"] or self.no_name,
                 replier=comment["author"] or self.no_name,
