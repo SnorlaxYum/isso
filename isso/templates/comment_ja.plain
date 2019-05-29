@@ -1,14 +1,14 @@
-{{author}}{% if admin and email %} <{{ email }}>{% endif %}は書いた：
+{{comment.author}}{% if admin and comment.email %} <{{ comment.email }}>{% endif %}は書いた：
 
-{{comment}}
+{{comment.text}}
 
-{% if admin %}{% if website %}ユーザーのURL： {{website}}
-{% endif %}IPアドレス： {{ip}}
+{% if admin %}{% if comment.website %}ユーザーのURL： {{comment.website}}
+{% endif %}IPアドレス： {{comment.remote_addr}}
 {% endif %}コメントへのリンク： {{com_link}}
 
 ---
 {% if admin %}コメントを削除する： {{del_link}}
-{% if mode == 2 %}コメントを有効にする： {{act_link}}
+{% if comment.mode == 2 %}コメントを有効にする： {{act_link}}
 {% endif %}
 {% else %}退会する： {{unsubscribe}}
 {% endif %}

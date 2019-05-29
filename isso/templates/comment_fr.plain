@@ -1,14 +1,14 @@
-{{author}}{% if admin and email %} <{{ email }}>{% endif %} a écrit :
+{{author}}{% if admin and comment.email %} <{{ comment.email }}>{% endif %} a écrit :
 
-{{comment}}
+{{comment.text}}
 
-{% if admin %}{% if website %}Site de l'utilisateur : {{website}}
-{% endif %}Addresse IP : {{ip}}
+{% if admin %}{% if comment.website %}Site de l'utilisateur : {{comment.website}}
+{% endif %}Addresse IP : {{comment.remote_addr}}
 {% endif %}Lien vers le commentaire : {{com_link}}
 
 ---
 {% if admin %}Supprimer le commentaire : {{del_link}}
-{% if mode == 2 %}Activer le commentaire : {{act_link}}
+{% if comment.mode == 2 %}Activer le commentaire : {{act_link}}
 {% endif %}
 {% else %}Se désinscrire de cette conversation : {{unsubscribe}}
 {% endif %}

@@ -3,11 +3,19 @@ Variables usable under all situations:
 ========================================================================
 {{thread_link}} : self-explanatory
 {{thread_title}} : self-explanatory
-{{author}} : The name of the author of the comment
-{{email}} : The email of the author of the comment
-{{comment}} : The content of the comment
-{{website}} : The website address of the author of the comment
-{{ip}} : The IP address of the author of the comment
+{{com_link}} : The link to see the comment
+{{comment}}: The dictionary of the comment whose keys can be referenced
+for the values, the keys available to be used from it is listed below:
+    {{comment.author}} : The name of the author of the comment
+    {{comment.email}} : The email of the author of the comment
+    {{comment.text}} : The content of the comment
+    {{comment.website}} : The website address of the author of the comment
+    {{comment.remote_addr}} : The IP address of the author of the comment
+    {{comment.mode}} : The mode of the comment. 2 if waiting for approval,
+                   1 if published.
+    There are other keys available for reference, check from comments
+    table in isso database. The most frequently used ones are listed
+    above.
 ========================================================================
 Usable variables only under an admin situation:
 
@@ -22,7 +30,6 @@ Usable variables only under an admin situation:
   For multiple-files situation, only use these variables in admin.html
   and admin.plain.
 ========================================================================
-{{com_link}} : The link to see the comment
 {{del_link}} : The link to delete the comment
 {{act_link}} : The link to activate the comment
                (Only available when the comment is waiting for approval,
@@ -50,11 +57,32 @@ Usable variables only under a reply notification situation:
   and admin.plain.
 ========================================================================
 {{parent_link}} : The link of the comment the author of the comment
-                  replies to, in other words, the link to the comment of
-                  the receiver of the notification
-{{com_link}} : The link to the comment link, in other words, the link of
-               the reply to the receiver
+                  replies to.
+{{recipient_link}} : The link of the comment of the receiver.
 {{unsubscribe}} : The link to unsubscribe from the subcription
+{{parent_comment}}: The dictionary of the replied comment whose keys
+can be referenced for the values, the keys available to be used from it
+is listed below:
+    {{parent_comment.author}} : The name of the author whose comment is
+                                replied to.
+    {{parent_comment.email}} : The email of the author whose comment is
+                                replied to.
+    {{parent_comment.text}} : The content of the replied comment
+    {{parent_comment.website}} : The website address of the author whose
+                                comment is replied to.
+    There are other keys available for reference, check from comments
+    table in isso database. The most frequently used ones are listed
+    above.
+{{recipient}}: The dictionary of the recipient whose keys can be
+referenced for the values, the keys available to be used from it is
+listed below:
+    {{recipient.author}} : The name of the recipient.
+    {{recipient.email}} : The email of the recipient.
+    {{recipient.text}} : The content of the comment of the recipient
+    {{recipient.website}} : The website address of the recipient
+    There are other keys available for reference, check from comments
+    table in isso database. The most frequently used ones are listed
+    above.
 ========================================================================
 To use a single template for multipart format:
   {% if part == "html" %}

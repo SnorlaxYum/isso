@@ -1,61 +1,90 @@
- ========================================================================
- Variables usable under all situations:
- ========================================================================
- {{thread_link}} : self-explainary
- {{thread_title}} : self-explainary
- {{author}} : The comment author
- {{email}} : The comment author's email
- {{comment}} : The comment content
- {{website}} : The comment author's website address
- {{ip}} : The author's IP
- ========================================================================
- Usable variables only under an admin situation:
+========================================================================
+Variables usable under all situations:
+========================================================================
+{{thread_link}} : self-explanatory
+{{thread_title}} : self-explanatory
+{{com_link}} : The link to see the comment
+{{comment}}: The dictionary of the comment whose keys can be referenced
+for the values, the keys available to be used from it is listed below:
+    {{comment.author}} : The name of the author of the comment
+    {{comment.email}} : The email of the author of the comment
+    {{comment.text}} : The content of the comment
+    {{comment.website}} : The website address of the author of the comment
+    {{comment.remote_addr}} : The IP address of the author of the comment
+    {{comment.mode}} : The mode of the comment. 2 if waiting for approval,
+                   1 if published.
+    There are other keys available for reference, check from comments
+    table in isso database. The most frequently used ones are listed
+    above.
+========================================================================
+Usable variables only under an admin situation:
 
-   VARIABLE USAGE EXAMPLE (IN SINGLE-FILE TEMPLATE SITUATION OR THE
-   SITUATION OF THE DEFAULT TEMPLATE):
-   {% if admin %}
-   ...(USE HERE)...
-   {% else %}
-   ...(Not here)...
-   {% endif %}
+  VARIABLE USAGE EXAMPLE (IN SINGLE-FILE TEMPLATE SITUATION OR THE
+  SITUATION OF THE DEFAULT TEMPLATE):
+  {% if admin %}
+  ...(USE HERE)...
+  {% else %}
+  ...(Not here)...
+  {% endif %}
 
-   For multiple-files situation, only use these variables in admin.html
-   and admin.plain.
- ========================================================================
- {{com_link}} : The comment link
- {{del_link}} : The link to delete the comment
- {{act_link}} : The link to activate the comment
-                (Only available when the comment is waiting for approval,
-                 For example:
-                 {% if admin %}
-                 ...
-                 {% if mode == 2 %}
-                 ...(USE HERE)...
-                 {% endif %}
-                 ...
-                 {% endif %}
-                )
- ========================================================================
- Usable variables only under a reply notification situation:
+  For multiple-files situation, only use these variables in admin.html
+  and admin.plain.
+========================================================================
+{{del_link}} : The link to delete the comment
+{{act_link}} : The link to activate the comment
+               (Only available when the comment is waiting for approval,
+                For example:
+                {% if admin %}
+                ...
+                {% if mode == 2 %}
+                ...(USE HERE)...
+                {% endif %}
+                ...
+                {% endif %}
+               )
+========================================================================
+Usable variables only under a reply notification situation:
 
-   VARIABLE USAGE EXAMPLE (IN SINGLE-FILE TEMPLATE SITUATION OR THE
-   SITUATION OF THE DEFAULT TEMPLATE):
-   {% if admin %}
-   ...(Not here)...
-   {% else %}
-   ...(USE HERE)...
-   {% endif %}
+  VARIABLE USAGE EXAMPLE (IN SINGLE-FILE TEMPLATE SITUATION OR THE
+  SITUATION OF THE DEFAULT TEMPLATE):
+  {% if admin %}
+  ...(Not here)...
+  {% else %}
+  ...(USE HERE)...
+  {% endif %}
 
-   For multiple-files situation, only use these variables in admin.html
-   and admin.plain.
- ========================================================================
- {{parent_link}} : The link of the comment the comment author replies to,
-                   in other words, the notification receiver's comment
- {{com_link}} : The comment link, in other words, the link of the reply
-                to the receiver
- {{unsubscribe}} : The link to unsubscribe from the subcription
- ========================================================================
- Warning: If you are customizng .plain templates, remember to tidy your
-          text and remove every unnecessary spaces besides the comment you
-          want (things like {#...#} won't be rendered), 'cause they will
-          be rendered into the final mail.
+  For multiple-files situation, only use these variables in admin.html
+  and admin.plain.
+========================================================================
+{{parent_link}} : The link of the comment the author of the comment
+                  replies to.
+{{recipient_link}} : The link of the comment of the receiver.
+{{unsubscribe}} : The link to unsubscribe from the subcription
+{{parent_comment}}: The dictionary of the replied comment whose keys
+can be referenced for the values, the keys available to be used from it
+is listed below:
+    {{parent_comment.author}} : The name of the author whose comment is
+                                replied to.
+    {{parent_comment.email}} : The email of the author whose comment is
+                                replied to.
+    {{parent_comment.text}} : The content of the replied comment
+    {{parent_comment.website}} : The website address of the author whose
+                                comment is replied to.
+    There are other keys available for reference, check from comments
+    table in isso database. The most frequently used ones are listed
+    above.
+{{recipient}}: The dictionary of the recipient whose keys can be
+referenced for the values, the keys available to be used from it is
+listed below:
+    {{recipient.author}} : The name of the recipient.
+    {{recipient.email}} : The email of the recipient.
+    {{recipient.text}} : The content of the comment of the recipient
+    {{recipient.website}} : The website address of the recipient
+    There are other keys available for reference, check from comments
+    table in isso database. The most frequently used ones are listed
+    above.
+========================================================================
+Warning: If you are customizng .plain templates, remember to tidy your
+        text and remove every unnecessary spaces besides the comment you
+        want (things like {#...#} won't be rendered), 'cause they will
+        be rendered into the final mail.

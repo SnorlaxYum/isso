@@ -1,15 +1,15 @@
 <html>
-<p>{{author}}{% if email %} &lt;<a href="mailto:{{email}}">{{ email }}</a>&gt;{% endif %} wrote:</p>
+<p>{{comment.author}}{% if comment.email %} &lt;<a href="mailto:{{comment.email}}">{{ comment.email }}</a>&gt;{% endif %} wrote:</p>
 
-<p>{{comment}}</p>
+<p>{{comment.text}}</p>
 
 <p>
 
-	{% if website %}
-	User's URL: <a href="{{website}}">{{website}}</a>
+	{% if comment.website %}
+	User's URL: <a href="{{website}}">{{comment.website}}</a>
 	<br>
 	{% endif %}
-	IP address: {{ip}}
+	IP address: {{comment.remote_addr}}
 	<br>
 
 
@@ -23,7 +23,7 @@
 
 	Delete comment: <a href="{{del_link}}">Click Here</a>
 	<br>
-	{% if mode == 2 %}
+	{% if comment.mode == 2 %}
 	Activate comment: <a href="{{act_link}}">Click Here</a>
 	{% endif %}
 

@@ -1,15 +1,15 @@
 <html>
-<p>{{author}}{% if admin and email %} &lt;<a href="mailto:{{email}}">{{ email }}</a>&gt;{% endif %} a écrit :</p>
+<p>{{comment.author}}{% if admin and comment.email %} &lt;<a href="mailto:{{comment.email}}">{{ comment.email }}</a>&gt;{% endif %} a écrit :</p>
 
-<p>{{comment}}</p>
+<p>{{comment.text}}</p>
 
 <p>
 	{% if admin %}
-	{% if website %}
-	Site de l'utilisateur : <a href="{{website}}">{{website}}</a>
+	{% if comment.website %}
+	Site de l'utilisateur : <a href="{{comment.website}}">{{comment.website}}</a>
 	<br>
 	{% endif %}
-	Addresse IP : {{ip}}
+	Addresse IP : {{comment.remote_addr}}
 	<br>
 	{% endif %}
 
@@ -23,10 +23,10 @@
 	{% if admin %}
 	Supprimer le commentaire : <a href="{{del_link}}">Cliquez ici</a>
 	<br>
-	{% if mode == 2 %}
+	{% if comment.mode == 2 %}
 	Activer le commentaire : <a href="{{act_link}}">Cliquez ici</a>
 	{% endif %}
-	
+
 	{% else %}
 	Se désinscrire de cette conversation : <a href="{{unsubscribe}}">Cliquez ici</a>
 	{% endif %}

@@ -1,14 +1,14 @@
-{{author}}{% if admin and email %} <{{ email }}>{% endif %} wrote:
+{{comment.author}}{% if admin and comment.email %} <{{ comment.email }}>{% endif %} wrote:
 
-{{comment}}
+{{comment.text}}
 
-{% if admin %}{% if website %}User's URL: {{website}}
-{% endif %}IP address: {{ip}}
+{% if admin %}{% if comment.website %}User's URL: {{comment.website}}
+{% endif %}IP address: {{comment.remote_addr}}
 {% endif %}Link to comment: {{com_link}}
 
 ---
 {% if admin %}Delete comment: {{del_link}}
-{% if mode == 2 %}Activate comment: {{act_link}}
+{% if comment.mode == 2 %}Activate comment: {{act_link}}
 {% endif %}
 {% else %}Unsubscribe from this conversation: {{unsubscribe}}
 {% endif %}

@@ -1,6 +1,6 @@
-{{author}}{% if admin and email %} <{{ email }}>{% endif %} wrote:
+{{comment.author}} wrote:
 
-{{comment}}
+{{comment.text}}
 
 Link to comment: {{com_link}}
 

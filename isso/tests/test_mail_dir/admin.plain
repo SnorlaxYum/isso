@@ -1,14 +1,14 @@
-{{author}}{% if email %} <{{ email }}>{% endif %} wrote:
+{{comment.author}}{% if comment.email %} <{{ comment.email }}>{% endif %} wrote:
 
-{{comment}}
+{{comment.text}}
 
-{% if website %}User's URL: {{website}}
-{% endif %}IP address: {{ip}}
+{% if comment.website %}User's URL: {{comment.website}}
+{% endif %}IP address: {{comment.remote_addr}}
 Link to comment: {{com_link}}
 
 ---
 Delete comment: {{del_link}}
-{% if mode == 2 %}Activate comment: {{act_link}}
+{% if comment.mode == 2 %}Activate comment: {{act_link}}
 {% endif %}
 
 {# See comment_plain.txt for manual #}

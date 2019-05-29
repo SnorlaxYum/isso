@@ -1,15 +1,15 @@
 <html>
-<p>{{author}}{% if admin and email %} &lt;<a href="mailto:{{email}}">{{ email }}</a>&gt;{% endif %}說：</p>
+<p>{{comment.author}}{% if admin and comment.email %} &lt;<a href="mailto:{{comment.email}}">{{ comment.email }}</a>&gt;{% endif %}說：</p>
 
-<p>{{comment}}</p>
+<p>{{comment.text}}</p>
 
 <p>
 	{% if admin %}
-	{% if website %}
-	用戶網址：<a href="{{website}}">{{website}}</a>
+	{% if comment.website %}
+	用戶網址：<a href="{{website}}">{{comment.website}}</a>
 	<br>
 	{% endif %}
-	IP地址：{{ip}}
+	IP地址：{{comment.remote_addr}}
 	<br>
 	{% endif %}
 
@@ -23,10 +23,10 @@
 	{% if admin %}
 	刪除評論：<a href="{{del_link}}">點我</a>
 	<br>
-	{% if mode == 2 %}
+	{% if comment.mode == 2 %}
 	激活評論：<a href="{{act_link}}">點我</a>
 	{% endif %}
-	
+
 	{% else %}
 	退訂：<a href="{{unsubscribe}}">點我</a>
 	{% endif %}

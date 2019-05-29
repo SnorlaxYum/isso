@@ -1,14 +1,14 @@
-{{author}}{% if admin and email %} <{{ email }}>{% endif %}说：
+{{comment.author}}{% if admin and comment.email %} <{{ comment.email }}>{% endif %}说：
 
-{{comment}}
+{{comment.text}}
 
-{% if admin %}{% if website %}用户网址：{{website}}
-{% endif %}IP地址：{{ip}}
+{% if admin %}{% if comment.website %}用户网址：{{comment.website}}
+{% endif %}IP地址：{{comment.remote_addr}}
 {% endif %}评论链接：{{com_link}}
 
 ---
 {% if admin %}删除评论：{{del_link}}
-{% if mode == 2 %}激活评论：{{act_link}}
+{% if comment.mode == 2 %}激活评论：{{act_link}}
 {% endif %}
 {% else %}退订：{{unsubscribe}}
 {% endif %}
