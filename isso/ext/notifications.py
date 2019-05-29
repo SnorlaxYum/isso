@@ -226,8 +226,9 @@ class SMTP(object):
 
         jinjaenv = Environment(loader=FileSystemLoader(temp_path))
         comment["author"] = comment["author"] or self.no_name
-        parent_comment["author"] = parent_comment["author"] or self.no_name
-        recipient["author"] = recipient["author"] or self.no_name
+        if parent_comment:
+            parent_comment["author"] = parent_comment["author"] or self.no_name
+            recipient["author"] = recipient["author"] or self.no_name
 
         if part == "html":
             convert = html.Markup(self.isso.conf.section("markup")).render
