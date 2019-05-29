@@ -311,7 +311,7 @@ class TestMail(unittest.TestCase):
         rv["email"] = ""
         rv["remote_addr"] = "127.0.0.1"
         self.assertEqual(self.smtp.format(thread_test, rv, None, part="html"),
-                         '<html>\n<p>{author} hat geschrieben:</p>\n\n<p>{comment}</p>\n\n<p>\n\t\n\t\n\tURL des Benutzers: <a href="{website}">{website}</a>\n\t<br>\n\t\n\tIP Adresse: {ip}\n\t<br>\n\t\n\n\tLink zum Kommentar: <a href="{com_link}">Hier klicken</a>\n</p>\n\n<hr>\n\n<p>\n\n\t\n\tKommentar löschen: <a href="{del_link}">Hier klicken</a>\n\t<br>\n\t\n\t\n\t\n\n</p>\n</html>\n'.format(
+                         '<html>\n<p>{author} hat geschrieben:</p>\n\n<p>{comment}</p>\n\n<p>\n\t\n\t\n\tURL des Benutzers: <a href="{website}">{website}</a>\n\t<br>\n\t\n\tIP Adresse: {ip}\n\t<br>\n\t\n\n\tLink zum Kommentar: <a href="{com_link}">Hier klicken</a>\n</p>\n\n<hr>\n\n<p>\n\n\t\n\tKommentar löschen: <a href="{del_link}">Hier klicken</a>\n\t<br>\n\t\n\n\t\n\n</p>\n</html>\n'.format(
                              author="Anonym",
                              comment="<p>This is <strong>de</strong>.</p>",
                              website=rv["website"],
