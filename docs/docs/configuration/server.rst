@@ -244,71 +244,69 @@ configure the format the mail notification uses in SMTP section.
     template =
 
 language
-	specify the language of the mail format by its `ISO 639-1<https://en.wikipedia.org/wiki/ISO_639-1>`_ (two letter)
-	code, default to `en`. The "Anonymous" will be translated in the language you
-	set. If you use the default template, the template will also be translated into
-	the language (Note that the default templates supported to be translated using
-	the option now includes: `en`, `de`, `fr`, `ja`, `zh`, `zh-CN`, `zh-TW`. You are welcome to
-	contribute by adding the translated `comment_lang.plain` and `comment_lang.html` to
-	`isso/templates`. The default `comment.plain` and `comment.html` in that directory
-	are what should be translated)
+  	specify the language of the mail format by its `ISO 639-1<https://en.wikipedia.org/wiki/ISO_639-1>`_ (two letter)
+  	code, default to `en`. The "Anonymous" will be translated in the language you
+  	set. If you use the default template, the template will also be translated into
+  	the language (Note that the default templates supported to be translated using
+  	the option now includes: `en`, `de`, `fr`, `ja`, `zh`, `zh-CN`, `zh-TW`. You are welcome to
+  	contribute by adding the translated `comment_lang.plain` and `comment_lang.html` to
+  	`isso/templates`. The default `comment.plain` and `comment.html` in that directory
+  	are what should be translated)
 
 format
-	specify mail format to use, available options: plain, html, multipart.
-	Default: plain
+  	specify mail format to use, available options: plain, html, multipart.
+  	Default: plain
 
 subject_admin
-	specify the subject format of the notification email sent to the admin.
-  Default: `{title}`
-  Available variables:
-  `{title}`: The title of the isso thread.
-  `{replier}`: The name of the author of the comment. If the author didn't fill in a
-  name, it will fallback to "Anonymous" or something else according to the language
-  you set to in the `language` option above.
+  	specify the subject format of the notification email sent to the admin.
+    Default: `{title}`
+    Available variables:
+    `{title}`: The title of the isso thread.
+    `{replier}`: The name of the author of the comment. If the author has no name,
+    it will fallback to the term "Anonymous".
 
 subject_user
-	specify the subject format of the notification email sent to the subscribed
-	commenter.
-  Default: `Re: New comment posted on {title}`
-  Available variables:
-  `{title}`: The title of the isso thread.
-  `{replier}`: The name of the author of the comment. If the author didn't fill in a
-  name, it will fallback to "Anonymous" or something else according to the language
-  you set to in the `language` option above.
-  `{receiver}`: The author whose comment is replied to in this situation.  If the
-  author didn't fill in a name, it will fallback to "Anonymous" or something
-  else according to the language you set to in the `language` option above.
+  	specify the subject format of the notification email sent to the subscribed
+  	commenter.
+    Default: `Re: New comment posted on {title}`
+    Available variables:
+    `{title}`: The title of the isso thread.
+    `{replier}`: The name of the author of the comment. If the author has no name,
+    it will fallback to the term "Anonymous".
+    `{repliee}`: The author whose comment is replied to.  If the author has no
+    name, it will fallback to the term "Anonymous".
+    `{receiver}`: The receiver of the email.
 
 template
-	specify the path to your customized template of comment, in jinja2 format.
-  Default: For users who set `format = plain`, see
-	`isso/isso/templates/comment.plain` (or
-	`isso/isso/templates/comment_<iso639-1-code>.plain` for other languages);
-	For users who set `format = html`, see
-	`isso/isso/templates/comment.html` (or
-	`isso/isso/templates/comment_<iso639-1-code>.html` for other languages);
-	For users who set `format = multipart`, see
-	`isso/isso/templates/comment.html` and `isso/isso/templates/comment.plain`
-	(or `isso/isso/templates/comment_<iso639-1-code>.html` and
-	`isso/isso/templates/comment_<iso639-1-code>.plain` for other languages).
-	Customized path: For users who set `format = plain` or `format = html`,
-	it's also possible to set the option to the absolute path of a directory
-	or a single template. When the option is set to the absolute path of a
-	directory, it'll check if `admin.html` and `user.html` (`admin.plain` and
-	`user.plain` for plain text users) in that directory are available to be
-	used for the format of the mail intended to be sent to admin and user,
-	respectively.
-	For users who set `format = multipart`, just set it to the absolute path
-	to a directory. it'll check if `admin.html`, `user.html` (For html part,
-	the former is used for the format of the mail sent to admin, the latter
-	for the format of the mail sent to user), `admin.plain` and `user.plain`
-	(For plain text part, the former is used for the format of the mail sent
-	to admin, the latter for the format of the mail sent to user) in that
-	directory are available. I don't recommend it though it's possible to set
-	it to the absolute path to a single template and get it working, see
-	`isso/isso/templates/comment.plain` for some details on this.
-	The log will tell you what happened when any error occurs.
-	You can also refer to the `original pull request<https://github.com/posativ/isso/pull/518#issue-241452322>` for details.
+  	specify the path to your customized template of comment, in jinja2 format.
+    Default: For users who set `format = plain`, see
+  	`isso/isso/templates/comment.plain` (or
+  	`isso/isso/templates/comment_<iso639-1-code>.plain` for other languages);
+  	For users who set `format = html`, see
+  	`isso/isso/templates/comment.html` (or
+  	`isso/isso/templates/comment_<iso639-1-code>.html` for other languages);
+  	For users who set `format = multipart`, see
+  	`isso/isso/templates/comment.html` and `isso/isso/templates/comment.plain`
+  	(or `isso/isso/templates/comment_<iso639-1-code>.html` and
+  	`isso/isso/templates/comment_<iso639-1-code>.plain` for other languages).
+  	Customized path: For users who set `format = plain` or `format = html`,
+  	it's also possible to set the option to the absolute path of a directory
+  	or a single template. When the option is set to the absolute path of a
+  	directory, it'll check if `admin.html` and `user.html` (`admin.plain` and
+  	`user.plain` for plain text users) in that directory are available to be
+  	used for the format of the mail intended to be sent to admin and user,
+  	respectively.
+  	For users who set `format = multipart`, just set it to the absolute path
+  	to a directory. it'll check if `admin.html`, `user.html` (For html part,
+  	the former is used for the format of the mail sent to admin, the latter
+  	for the format of the mail sent to user), `admin.plain` and `user.plain`
+  	(For plain text part, the former is used for the format of the mail sent
+  	to admin, the latter for the format of the mail sent to user) in that
+  	directory are available. I don't recommend it though it's possible to set
+  	it to the absolute path to a single template and get it working, see
+  	`isso/isso/templates/comment.plain` for some details on this.
+  	The log will tell you what happened when any error occurs.
+  	You can also refer to the `original pull request<https://github.com/posativ/isso/pull/518#issue-241452322>` for details.
 
 Guard
 -----
