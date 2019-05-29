@@ -251,7 +251,6 @@ class SMTP(object):
                 part=part)
         else:
             uri = self.public_endpoint + "/id/%i" % parent_comment["id"]
-            print(recipient)
             self.key = self.isso.sign(('unsubscribe', recipient["email"]))
             com_temp = jinjaenv.get_template(com_ori_user).render(
                 comment=comment,
