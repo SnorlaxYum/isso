@@ -132,8 +132,9 @@ class SMTP(object):
         yield "comments.new:after-save", self.notify_new
         yield "comments.activate", self.notify_activated
 
-    def format(self, thread, comment, parent_comment, recipient=None, admin=False, part="plain"):
+    def format(self, thread, comment, parent_comment, recipient=None, part="plain"):
         jinjaenv = Environment(loader=FileSystemLoader("/"))
+        admin = not parent_comment
 
         temp_path = os.path.join(dist.location, "isso", "templates")
         com_ori = "comment_{0}.{1}".format(self.mail_lang, part)
@@ -249,7 +250,8 @@ class SMTP(object):
                 part=part)
         else:
             uri = self.public_endpoint + "/id/%i" % parent_comment["id"]
-            self.key = self.isso.sign(('unsubscribe', recipient))
+            print(recipient)
+            self.key = self.isso.sign(('unsubscribe', recipient["email"]))
             com_temp = jinjaenv.get_template(com_ori_user).render(
                 author=comment["author"] or self.no_name or "Anonymous",
                 email=comment["email"],
@@ -259,23 +261,33 @@ class SMTP(object):
                 ip=comment["remote_addr"],
                 parent_link=local("origin") + thread["uri"] + "#isso-%i" % parent_comment["id"],
                 com_link=local("origin") + thread["uri"] + "#isso-%i" % comment["id"],
-                unsubscribe=uri + "/unsubscribe/" + quote(recipient) + "/" + self.key,
+                unsubscribe=uri + "/unsubscribe/" + quote(recipient["email"]) + "/" + self.key,
                 thread_link=local("origin") + thread["uri"],
                 thread_title=thread["title"],
                 part=part)
 
         return com_temp
 
-    def notify_new(self, thread, comment):
-        if self.admin_notify:
-            mailtitle_admin = self.isso.conf.get("mail", "subject_admin").format(
+    def notify_subject(self, thread, comment, parent_comment=None, recipient=None):
+        if parent_comment:
+            return self.isso.conf.get("mail", "subject_user").format(
+                title=thread["title"],
+                repliee=parent_comment["author"] or self.no_name,
+                replier=comment["author"] or self.no_name,
+                receiver=recipient["author"] or self.no_name)
+        else:
+            return self.isso.conf.get("mail", "subject_admin").format(
                 title=thread["title"],
                 replier=comment["author"] or self.no_name)
+
+    def notify_new(self, thread, comment):
+        if self.admin_notify:
+            subject = self.notify_subject(thread, comment)
             if self.mail_format == "multipart":
-                body_plain = self.format(thread, comment, None, admin=True, part="plain")
-                body_html = self.format(thread, comment, None, admin=True, part="html")
+                body_plain = self.format(thread, comment, None, part="plain")
+                body_html = self.format(thread, comment, None, part="html")
                 self.sendmail(
-                    subject=mailtitle_admin,
+                    subject=subject,
                     body_html=body_html,
                     body_plain=body_plain,
                     thread=thread,
@@ -283,7 +295,7 @@ class SMTP(object):
             else:
                 body = self.format(thread, comment, None, admin=True, part=self.mail_format)
                 self.sendmail(
-                    subject=mailtitle_admin,
+                    subject=subject,
                     body=body,
                     thread=thread,
                     comment=comment)
@@ -307,13 +319,10 @@ class SMTP(object):
                 email = comment_to_notify["email"]
                 if "email" in comment_to_notify and comment_to_notify["notification"] and email not in notified \
                         and comment_to_notify["id"] != comment["id"] and email != comment["email"]:
-                    subject = self.isso.conf.get("mail", "subject_user").format(
-                        title=thread["title"],
-                        receiver=parent_comment["author"] or self.no_name,
-                        replier=comment["author"] or self.no_name)
+                    subject = self.notify_subject(thread, comment, parent_comment, comment_to_notify)
                     if self.mail_format == "multipart":
-                        body_plain = self.format(thread, comment, parent_comment, email, admin=False, part="plain")
-                        body_html = self.format(thread, comment, parent_comment, email, admin=False, part="html")
+                        body_plain = self.format(thread, comment, parent_comment, comment_to_notify, part="plain")
+                        body_html = self.format(thread, comment, parent_comment, comment_to_notify, part="html")
                         self.sendmail(
                             subject=subject,
                             body_html=body_html,
@@ -322,7 +331,7 @@ class SMTP(object):
                             comment=comment,
                             to=email)
                     else:
-                        body = self.format(thread, comment, parent_comment, email, admin=False, part=self.mail_format)
+                        body = self.format(thread, comment, parent_comment, comment_to_notify, part=self.mail_format)
                         self.sendmail(
                             subject=subject,
                             body=body,
