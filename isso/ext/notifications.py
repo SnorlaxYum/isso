@@ -273,7 +273,7 @@ class SMTP(object):
 
     def notify_subject(self, thread, comment, parent_comment=None, recipient=None):
         if parent_comment:
-            subject_format = self.isso.conf.getlist("mail", "subject_user")
+            subject_format = list(self.isso.conf.getiter("mail", "subject_user"))
             if len(subject_format) == 1:
                 return subject_format[0].format(
                     title=thread["title"],

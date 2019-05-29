@@ -73,7 +73,7 @@ class TestMail(unittest.TestCase):
 
     def testSubject_customization(self):
         """Test subject customization parsing"""
-        self.conf.set("mail", "subject_user", "{replier} replied to {repliee}'s comment on the post {title}, {replier} replied to your comment on the post {title}")
+        self.conf.set("mail", "subject_user", "{replier} replied to {repliee}'s comment on the post {title}\n{replier} replied to your comment on the post {title}")
         self.conf.set("mail", "subject_admin", "{replier} commented on your post {title}")
         self.smtp = SMTP(self.app)
         thread_test = {"uri": "/aaa", "title": "Hello isso!"}
