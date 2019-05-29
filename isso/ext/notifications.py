@@ -300,7 +300,7 @@ class SMTP(object):
                     thread=thread,
                     comment=comment)
 
-            logger.info("[mail] Sending notification mail titled '{0}' to the admin".format(mailtitle_admin))
+            logger.info("[mail] Sending notification mail titled '{0}' to the admin".format(subject))
 
         if comment["mode"] == 1:
             self.notify_users(thread, comment)
