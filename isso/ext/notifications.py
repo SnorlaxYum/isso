@@ -309,7 +309,7 @@ class SMTP(object):
                     thread=thread,
                     comment=comment)
             else:
-                body = self.format(thread, comment, None, admin=True, part=self.mail_format)
+                body = self.format(thread, comment, None, part=self.mail_format)
                 self.sendmail(
                     subject=subject,
                     body=body,
