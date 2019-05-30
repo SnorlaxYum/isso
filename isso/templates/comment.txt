@@ -70,6 +70,9 @@ is listed below:
     {{parent_comment.text}} : The content of the replied comment
     {{parent_comment.website}} : The website address of the author whose
                                 comment is replied to.
+    {{parent_comment.id}} : The unique id number of the replied comment,
+                            useful when it comes to judging if the replied
+                            comment is exactly the comment of the recipient.
     There are other keys available for reference, check from comments
     table in isso database. The most frequently used ones are listed
     above.
@@ -80,6 +83,10 @@ listed below:
     {{recipient_comment.email}} : The email of the recipient.
     {{recipient_comment.text}} : The content of the comment of the recipient
     {{recipient_comment.website}} : The website address of the recipient
+    {{recipient_comment.id}} : The unique id number of the comment of the
+                               recipient, useful when it comes to judging
+                               if the replied comment is exactly the
+                               comment of the recipient.
     There are other keys available for reference, check from comments
     table in isso database. The most frequently used ones are listed
     above.
