@@ -131,57 +131,9 @@ class TestMail(unittest.TestCase):
                              del_link=self.public_endpoint + "/id/%i/delete/" % rv["id"] + self.smtp.key,
                              com_link=local("origin") + thread_test["uri"] + "#isso-%i" % rv["id"]))
 
-    def testAnonymousRuntimeError_plain(self):
-        """Test what will happen when these happens (plain part):
-        1. The language is set to the one which will cause translate function to throw RuntimeError
-        2. The default template could not be found.
-        """
-        self.conf.set("mail", "language", "tk")
-        self.smtp = SMTP(self.app)
-        thread_test = {"uri": "/aaa", "title": "Hello isso!"}
-        rv = self.post(
-            '/new?uri=%2Fpath%2F',
-            data=json.dumps({"text": "From Anonymous", "website": "", }))
-        self.assertEqual(rv.status_code, 201)
-        self.assertIn("Set-Cookie", rv.headers)
-        rv = loads(rv.data)
-        rv["email"] = ""
-        rv["remote_addr"] = "127.0.0.1"
-        self.assertEqual(self.smtp.format(thread_test, rv, None),
-                         "{author} wrote:\n\n{comment}\n\nIP address: {ip}\nLink to comment: {com_link}\n\n---\nDelete comment: {del_link}\n\n\n".format(
-                             author="Anonymous",
-                             comment=rv["text"],
-                             ip=rv["remote_addr"],
-                             del_link=self.public_endpoint + "/id/%i/delete/" % rv["id"] + self.smtp.key,
-                             com_link=local("origin") + thread_test["uri"] + "#isso-%i" % rv["id"]))
-
-    def testAnonymousRuntimeError_html(self):
-        """Test what will happen when these happens (html part):
-        1. The language is set to the one which will cause translate function to throw RuntimeError
-        2. The default template could not be found.
-        """
-        self.conf.set("mail", "language", "tk")
-        self.smtp = SMTP(self.app)
-        thread_test = {"uri": "/aaa", "title": "Hello isso!"}
-        rv = self.post(
-            '/new?uri=%2Fpath%2F',
-            data=json.dumps({"text": "From __Anonymous__", "website": "", }))
-        self.assertEqual(rv.status_code, 201)
-        self.assertIn("Set-Cookie", rv.headers)
-        rv = loads(rv.data)
-        rv["email"] = ""
-        rv["remote_addr"] = "127.0.0.1"
-        self.assertEqual(self.smtp.format(thread_test, rv, None, part="html"),
-                         '<html>\n<p>{author} wrote:</p>\n\n<p>{comment}</p>\n\n<p>\n\t\n\t\n\tIP address: {ip}\n\t<br>\n\t\n\n\tLink to comment: <a href="{com_link}">Click Here</a>\n</p>\n\n<hr>\n\n<p>\n\n\t\n\tDelete comment: <a href="{del_link}">Click Here</a>\n\t<br>\n\t\n\n\t\n\n</p>\n</html>\n'.format(
-                             author="Anonymous",
-                             comment="<p>From <strong>Anonymous</strong></p>",
-                             ip=rv["remote_addr"],
-                             del_link=self.public_endpoint + "/id/%i/delete/" % rv["id"] + self.smtp.key,
-                             com_link=local("origin") + thread_test["uri"] + "#isso-%i" % rv["id"]))
-
     def testAnonymousStringNotAvailable_plain(self):
         """Test what will happen when these happens (plain part):
-        1. The language is set to the one which will cause translate function to return an undesired string
+        1. The language is set to an available one in isso/js/app/i18n
         2. The default template could not be found.
         """
         self.conf.set("mail", "language", "aa")
@@ -205,7 +157,7 @@ class TestMail(unittest.TestCase):
 
     def testAnonymousStringNotAvailable_html(self):
         """Test what will happen when these happens (html part):
-        1. The language is set to the one which will cause translate function to return an undesired string
+        1. The language is set to an available one in isso/js/app/i18n
         2. The default template could not be found.
         """
         self.conf.set("mail", "language", "aa")

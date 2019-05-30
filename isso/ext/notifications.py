@@ -16,7 +16,6 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from jinja2 import Environment, FileSystemLoader
 import jinja2.exceptions as jinja2_exceptions
-from translate import Translator
 
 try:
     from urllib.parse import quote
@@ -84,24 +83,21 @@ class SMTP(object):
         self.public_endpoint = isso.conf.get("server", "public-endpoint") or local("host")
         self.admin_notify = any((n in ("smtp", "SMTP")) for n in isso.conf.getlist("general", "notify"))
         self.reply_notify = isso.conf.getboolean("general", "reply-notifications")
-        self.mail_lang = self.isso.conf.get("mail", "language")
+        self.mail_lang = self.isso.conf.get("mail", "language").replace("-","_")
         self.mail_format = self.isso.conf.get("mail", "format")
 
         try:
-            self.no_name = Translator(to_lang=self.mail_lang).translate("Anonymous")
+            with open(os.path.join(dist.location, "isso", "js", "app", "i18n", "%s.js" % self.mail_lang)) as translation:
+                tran_dict = translation.read()
+            self.no_name = json.loads(tran_dict[tran_dict.index("{"):tran_dict.index(");")])["comment-anonymous"]
         except Exception as err:
-            logger.warn("[mail] Some error about translate. %s"
-                        % type(err)
+            logger.warn("[mail] Can't find the file %s. Be sure to set mail_lang to a ISO 639-1 (two letter) code. %s"
+                        % (os.path.join(dist.location, "isso", "js", "app", "i18n", "%s.js" % self.mail_lang), type(err))
                         )
             for er in err.args:
                 logger.warn("      %s" % er)
             self.no_name = "Anonymous"
             logger.warn('[mail] Anonymous fell back to "Anonymous".')
-        else:
-            if self.mail_lang.upper() in self.no_name:
-                self.no_name = "Anonymous"
-                logger.warn('[mail] No anonymous found for %s, anonymous fell back to "Anonymous".'
-                            % self.mail_lang)
 
         # test SMTP connectivity
         try:
