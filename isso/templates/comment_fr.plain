@@ -1,4 +1,4 @@
-{{author}}{% if admin and comment.email %} <{{ comment.email }}>{% endif %} a écrit :
+{{comment.author}}{% if admin and comment.email %} <{{ comment.email }}>{% endif %} a écrit :
 
 {{comment.text}}
 

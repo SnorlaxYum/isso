@@ -1,4 +1,4 @@
-{{author}}{% if admin and comment.email %} <{{ comment.email }}>{% endif %}說：
+{{comment.author}}{% if admin and comment.email %} <{{ comment.email }}>{% endif %}說：
 
 {{comment.text}}
 
