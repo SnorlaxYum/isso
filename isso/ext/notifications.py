@@ -87,8 +87,11 @@ class SMTP(object):
         self.mail_format = self.isso.conf.get("mail", "format")
 
         try:
-            with open(os.path.join(dist.location, "isso", "js", "app", "i18n", "%s.js" % self.mail_lang)) as translation:
-                tran_dict = translation.read()
+            with open(os.path.join(dist.location, "isso", "js", "app", "i18n", "%s.js" % self.mail_lang), 'r') as translation:
+                if sys.version_info < (3, 0):
+                    tran_dict = translation.read().decode('utf-8')
+                else:
+                    tran_dict = translation.read()
             self.no_name = json.loads(tran_dict[tran_dict.index("{"):tran_dict.index(");")])["comment-anonymous"]
         except Exception as err:
             logger.warn("[mail] Can't find the file %s. Be sure to set mail_lang to a ISO 639-1 (two letter) code. %s"
