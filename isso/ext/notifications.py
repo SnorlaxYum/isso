@@ -259,7 +259,7 @@ class SMTP(object):
             com_temp = jinjaenv.get_template(com_ori_user).render(
                 comment=comment,
                 parent_comment=parent_comment,
-                recipient=recipient,
+                recipient_comment=recipient,
                 admin=admin,
                 parent_link=local("origin") + thread["uri"] + "#isso-%i" % parent_comment["id"],
                 recipient_link=local("origin") + thread["uri"] + "#isso-%i" % recipient["id"],

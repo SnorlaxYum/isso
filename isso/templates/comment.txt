@@ -73,13 +73,13 @@ is listed below:
     There are other keys available for reference, check from comments
     table in isso database. The most frequently used ones are listed
     above.
-{{recipient}}: The dictionary of the recipient whose keys can be
+{{recipient_comment}}: The dictionary of the recipient whose keys can be
 referenced for the values, the keys available to be used from it is
 listed below:
-    {{recipient.author}} : The name of the recipient.
-    {{recipient.email}} : The email of the recipient.
-    {{recipient.text}} : The content of the comment of the recipient
-    {{recipient.website}} : The website address of the recipient
+    {{recipient_comment.author}} : The name of the recipient.
+    {{recipient_comment.email}} : The email of the recipient.
+    {{recipient_comment.text}} : The content of the comment of the recipient
+    {{recipient_comment.website}} : The website address of the recipient
     There are other keys available for reference, check from comments
     table in isso database. The most frequently used ones are listed
     above.
