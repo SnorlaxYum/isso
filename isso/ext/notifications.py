@@ -225,11 +225,11 @@ class SMTP(object):
 
         jinjaenv = Environment(loader=FileSystemLoader(temp_path))
         comment = comment.copy()
-        if parent_comment:
+        comment["author"] = comment["author"] or self.no_name or "Anonymous"
+
+        if recipient:
             parent_comment = parent_comment.copy()
             recipient = recipient.copy()
-        comment["author"] = comment["author"] or self.no_name or "Anonymous"
-        if parent_comment:
             parent_comment["author"] = parent_comment["author"] or self.no_name or "Anonymous"
             recipient["author"] = recipient["author"] or self.no_name or "Anonymous"
 
