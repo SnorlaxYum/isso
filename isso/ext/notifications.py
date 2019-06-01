@@ -133,7 +133,7 @@ class SMTP(object):
 
     def format(self, thread, comment, parent_comment, recipient=None, part="plain"):
         jinjaenv = Environment(loader=FileSystemLoader("/"))
-        admin = not parent_comment
+        admin = not recipient
 
         temp_path = os.path.join(dist.location, "isso", "templates")
         com_ori = "comment_{0}.{1}".format(self.mail_lang, part)
@@ -271,7 +271,7 @@ class SMTP(object):
         return com_temp
 
     def notify_subject(self, thread, comment, parent_comment=None, recipient=None):
-        if parent_comment:
+        if recipient:
             subject_format = list(self.isso.conf.getiter("mail", "subject_user"))
             if len(subject_format) == 1:
                 return subject_format[0].format(
