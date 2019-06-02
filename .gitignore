@@ -127,3 +127,4 @@ ENV/
 
 # Atom build-tools
 .build-tools.cson
+flake.log

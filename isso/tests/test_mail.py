@@ -22,6 +22,7 @@ http.curl = curl
 
 from isso.ext.notifications import SMTP
 
+
 class TestMail(unittest.TestCase):
 
     def setUp(self):
