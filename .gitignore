@@ -124,3 +124,6 @@ ENV/
 .project
 .pydevproject
 .settings/
+
+# Atom build-tools
+.build-tools.cson

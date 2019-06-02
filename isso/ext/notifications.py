@@ -107,10 +107,7 @@ class SMTP(object):
             with SMTPConnection(self.conf):
                 logger.info("connected to SMTP server")
         except (socket.error, smtplib.SMTPException):
-            if os.path.join(dist.location, "isso", "tests", "test_mail.py") in sys.argv:
-                pass
-            else:
-                logger.exception("unable to connect to SMTP server")
+            logger.exception("unable to connect to SMTP server")
 
         if uwsgi:
             def spooler(args):
@@ -131,9 +128,8 @@ class SMTP(object):
         yield "comments.new:after-save", self.notify_new
         yield "comments.activate", self.notify_activated
 
-    def format(self, thread, comment, parent_comment, recipient=None, part="plain"):
+    def format(self, thread, comment, parent_comment, recipient=None, part="plain", admin=False):
         jinjaenv = Environment(loader=FileSystemLoader("/"))
-        admin = not recipient
 
         temp_path = os.path.join(dist.location, "isso", "templates")
         com_ori = "comment_{0}.{1}".format(self.mail_lang, part)
@@ -270,8 +266,12 @@ class SMTP(object):
 
         return com_temp
 
-    def notify_subject(self, thread, comment, parent_comment=None, recipient=None):
-        if recipient:
+    def notify_subject(self, thread, comment, parent_comment=None, recipient=None, admin=False):
+        if admin:
+            return self.isso.conf.get("mail", "subject_admin").format(
+                title=thread["title"],
+                replier=comment["author"] or self.no_name)
+        else:
             subject_format = list(self.isso.conf.getiter("mail", "subject_user"))
             if len(subject_format) == 1:
                 return subject_format[0].format(
@@ -290,17 +290,13 @@ class SMTP(object):
                 repliee=parent_comment["author"] or self.no_name,
                 replier=comment["author"] or self.no_name,
                 receiver=recipient["author"] or self.no_name)
-        else:
-            return self.isso.conf.get("mail", "subject_admin").format(
-                title=thread["title"],
-                replier=comment["author"] or self.no_name)
 
     def notify_new(self, thread, comment):
         if self.admin_notify:
             subject = self.notify_subject(thread, comment)
             if self.mail_format == "multipart":
-                body_plain = self.format(thread, comment, None, part="plain")
-                body_html = self.format(thread, comment, None, part="html")
+                body_plain = self.format(thread, comment, None, part="plain", admin=True)
+                body_html = self.format(thread, comment, None, part="html", admin=True)
                 self.sendmail(
                     subject=subject,
                     body_html=body_html,
@@ -308,7 +304,7 @@ class SMTP(object):
                     thread=thread,
                     comment=comment)
             else:
-                body = self.format(thread, comment, None, part=self.mail_format)
+                body = self.format(thread, comment, None, part=self.mail_format, admin=True)
                 self.sendmail(
                     subject=subject,
                     body=body,
