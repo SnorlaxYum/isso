@@ -293,7 +293,7 @@ class SMTP(object):
 
     def notify_new(self, thread, comment):
         if self.admin_notify:
-            subject = self.notify_subject(thread, comment)
+            subject = self.notify_subject(thread, comment, admin=True)
             if self.mail_format == "multipart":
                 body_plain = self.format(thread, comment, None, part="plain", admin=True)
                 body_html = self.format(thread, comment, None, part="html", admin=True)
@@ -304,6 +304,7 @@ class SMTP(object):
                     thread=thread,
                     comment=comment)
             else:
+                subject = self.notify_subject(thread, comment)
                 body = self.format(thread, comment, None, part=self.mail_format, admin=True)
                 self.sendmail(
                     subject=subject,
