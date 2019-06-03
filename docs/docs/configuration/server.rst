@@ -274,7 +274,7 @@ subject_user
     it will fallback to the term "Anonymous".
     `{repliee}`: The author whose comment is replied to.  If the author has no
     name, it will fallback to the term "Anonymous".
-    `{receiver}`: The receiver of the email.
+    `{receiver}`: The name of the recipient of the email.
     If it is set to two values, then the first one will be used when `{repliee}`'s
     comment is not the `{receiver}`'s original one, the second one will be used
     otherwise.

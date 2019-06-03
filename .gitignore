@@ -9,6 +9,7 @@
 .Python
 .sass-cache
 .vagrant
+.pylintrc
 
 /bin
 /include
