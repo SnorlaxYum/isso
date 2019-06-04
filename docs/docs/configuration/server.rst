@@ -240,7 +240,8 @@ configure the format the mail notification uses in SMTP section.
     language = en
     format = plain
     subject_admin = {title}
-    subject_user = Re: New comment posted on {title}
+    subject_user_reply = Re: New comment posted on {title}
+    subject_user_new_comment = Re: New comment posted on {title}
     template =
 
 language
