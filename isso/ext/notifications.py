@@ -128,7 +128,7 @@ class SMTP(object):
         yield "comments.new:after-save", self.notify_new
         yield "comments.activate", self.notify_activated
 
-    def format(self, thread, comment, parent_comment, recipient=None, part="plain", admin=False):
+    def format(self, thread, comment, parent_comment, recipient_comment=None, part="plain", admin=False):
         jinjaenv = Environment(loader=FileSystemLoader("/"))
 
         temp_path = os.path.join(dist.location, "isso", "templates")
@@ -223,18 +223,18 @@ class SMTP(object):
         comment = comment.copy()
         comment["author"] = comment["author"] or self.no_name or "Anonymous"
 
-        if recipient:
+        if recipient_comment:
             parent_comment = parent_comment.copy()
-            recipient = recipient.copy()
+            recipient_comment = recipient_comment.copy()
             parent_comment["author"] = parent_comment["author"] or self.no_name or "Anonymous"
-            recipient["author"] = recipient["author"] or self.no_name or "Anonymous"
+            recipient_comment["author"] = recipient_comment["author"] or self.no_name or "Anonymous"
 
         if part == "html":
             convert = html.Markup(self.isso.conf.section("markup")).render
             comment["text"] = convert(comment["text"])
             if parent_comment:
                 parent_comment["text"] = convert(parent_comment["text"])
-                recipient["text"] = convert(recipient["text"])
+                recipient_comment["text"] = convert(recipient_comment["text"])
 
         if admin:
             uri = self.public_endpoint + "/id/%i" % comment["id"]
@@ -250,46 +250,38 @@ class SMTP(object):
                 part=part)
         else:
             uri = self.public_endpoint + "/id/%i" % parent_comment["id"]
-            self.key = self.isso.sign(('unsubscribe', recipient["email"]))
+            self.key = self.isso.sign(('unsubscribe', recipient_comment["email"]))
             com_temp = jinjaenv.get_template(com_ori_user).render(
                 comment=comment,
                 parent_comment=parent_comment,
-                recipient_comment=recipient,
+                recipient_comment=recipient_comment,
                 admin=admin,
                 parent_link=local("origin") + thread["uri"] + "#isso-%i" % parent_comment["id"],
-                recipient_link=local("origin") + thread["uri"] + "#isso-%i" % recipient["id"],
+                recipient_link=local("origin") + thread["uri"] + "#isso-%i" % recipient_comment["id"],
                 com_link=local("origin") + thread["uri"] + "#isso-%i" % comment["id"],
-                unsubscribe=uri + "/unsubscribe/" + quote(recipient["email"]) + "/" + self.key,
+                unsubscribe=uri + "/unsubscribe/" + quote(recipient_comment["email"]) + "/" + self.key,
                 thread_link=local("origin") + thread["uri"],
                 thread_title=thread["title"],
                 part=part)
 
         return com_temp
 
-    def notify_subject(self, thread, comment, parent_comment=None, recipient=None, admin=False):
+    def notify_subject(self, thread, comment, parent_comment=None, recipient_comment=None, admin=False):
         if admin:
             return self.isso.conf.get("mail", "subject_admin").format(
                 title=thread["title"],
                 replier=comment["author"] or self.no_name)
-        else:
-            subject_format = list(self.isso.conf.getiter("mail", "subject_user"))
-            if len(subject_format) == 1:
-                return subject_format[0].format(
-                    title=thread["title"],
-                    repliee=parent_comment["author"] or self.no_name,
-                    replier=comment["author"] or self.no_name,
-                    receiver=recipient["author"] or self.no_name)
-            if parent_comment["id"] == recipient["id"]:
-                return subject_format[1].format(
-                    title=thread["title"],
-                    repliee=parent_comment["author"] or self.no_name,
-                    replier=comment["author"] or self.no_name,
-                    receiver=recipient["author"] or self.no_name)
-            return subject_format[0].format(
+        if parent_comment["id"] == recipient_comment["id"]:
+            return self.isso.conf.get("mail", "subject_user_reply").format(
                 title=thread["title"],
-                repliee=parent_comment["author"] or self.no_name,
-                replier=comment["author"] or self.no_name,
-                receiver=recipient["author"] or self.no_name)
+                repliee=parent_comment["author"] or "Anonymous",
+                replier=comment["author"] or "Anonymous",
+                receiver=recipient_comment["author"] or "Anonymous")
+        return self.isso.conf.get("mail", "subject_user_new_comment").format(
+            title=thread["title"],
+            repliee=parent_comment["author"] or "Anonymous",
+            replier=comment["author"] or "Anonymous",
+            receiver=recipient_comment["author"] or "Anonymous")
 
     def notify_new(self, thread, comment):
         if self.admin_notify:
