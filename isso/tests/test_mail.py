@@ -4,6 +4,10 @@
 
 from __future__ import unicode_literals
 
+from isso import Isso, core, config, local, dist
+from isso.utils import http
+from isso.ext.notifications import SMTP
+
 import unittest
 import os
 import json
@@ -15,12 +19,8 @@ except ImportError:
     from urllib import quote
 
 from werkzeug.wrappers import Response
-from isso import Isso, core, config, local, dist
-from isso.utils import http
 from fixtures import curl, loads, FakeIP, JSONClient
 http.curl = curl
-
-from isso.ext.notifications import SMTP
 
 
 class TestMail(unittest.TestCase):
