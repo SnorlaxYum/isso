@@ -2,6 +2,10 @@
 
 from __future__ import unicode_literals
 
+from isso.compat import PY2K
+from isso import local, dist
+from isso.utils import html
+
 import sys
 import time
 import json
@@ -29,10 +33,6 @@ try:
     import uwsgi
 except ImportError:
     uwsgi = None
-
-from isso.compat import PY2K
-from isso import local, dist
-from isso.utils import html
 
 if PY2K:
     from thread import start_new_thread
